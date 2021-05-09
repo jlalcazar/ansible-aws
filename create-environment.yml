@@ -1,0 +1,39 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: yes
+  vars:
+  - vpc_region: eu-west-1
+  - deployment_key: deployment_keypair
+
+ tasks:
+  - name: create VPC
+    ec2_vpc_net:
+      name: AesSTGwk
+      state: present
+      cidr_block: 10.60.0.0/16
+      region: "{{ vpc_region }}"
+    register: ansibleVPC
+      
+  - name: display ansibleVPC results
+    debug: var=ansibleVPC
+
+- name: obtain all AZ present in region {{ vpc_region }}
+    aws_az_facts:
+      region: "{{ vpc_region }}"
+    register: az_in_region
+  
+  - name: display all AZ present in region {{ vpc_region }}
+    debug: var=az_in_region
+  
+  # private subnet in second az
+  - name: display AZ  private Subnets
+    debug:
+      msg:
+        - "private subnet in AZ: {{ az_in_region.availability_zones[0].zone_name }}"
+        - "private subnet in AZ: {{ az_in_region.availability_zones[1].zone_name }}"
+        - "private subnet in AZ: {{ az_in_region.availability_zones[2].zone_name }}"
+
+
+  
+
