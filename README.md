@@ -1,2 +1,2 @@
 # ansible-aws
-Deploy infrastructure on aws with ansible
+Deploy infrastructure on aws using ansible
